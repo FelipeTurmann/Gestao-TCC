@@ -7,16 +7,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
 @Slf4j
 public class JwtTokenProvider {
 
-    // private String jwtSecret;
+    @Value("${app.jwt.secret}")
+    private String jwtSecret;
 
     @Value("${app.jwt.expiration}")
     private int jwtExpirationInMs;
+
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
 
     // Método para gerar o token JWT
     public String generateToken(Authentication authentication) {
@@ -26,34 +32,29 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
-        // Gerar uma chave segura para o algoritmo HS512, que tem pelo menos 512 bits
-        var key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-
         return Jwts.builder()
                 .setSubject(Long.toString(userPrincipal.getId()))  // ID do usuário autenticado
                 .setIssuedAt(new Date())  // Data de emissão
                 .setExpiration(expiryDate)  // Data de expiração
                 .claim("tipoUsuario", userPrincipal.getTipoUsuario().name())  // Adiciona um claim para o tipo de usuário
-                .signWith(key)  // Assina o token com a chave segura
+                .signWith(getSigningKey())  // Usando a chave secreta para assinar o token
                 .compact();  // Retorna o JWT compactado
     }
 
     // Método para extrair o ID do usuário do token JWT
     public Long getUserIdFromJWT(String token) {
-        // Parse do token para extrair as claims
         Claims claims = Jwts.parser()
-                .setSigningKey(Keys.secretKeyFor(SignatureAlgorithm.HS512))  // Usando a mesma chave para validação
+                .setSigningKey(getSigningKey())  // Usando a mesma chave para validação
                 .parseClaimsJws(token)
                 .getBody();
 
-        // Retorna o ID do usuário extraído do token
         return Long.parseLong(claims.getSubject());
     }
 
     // Método para validar o token JWT
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(Keys.secretKeyFor(SignatureAlgorithm.HS512)).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(getSigningKey()).parseClaimsJws(authToken);  // Usando a chave secreta para validação
             return true;  // Token válido
         } catch (SignatureException ex) {
             log.error("Assinatura JWT inválida");
