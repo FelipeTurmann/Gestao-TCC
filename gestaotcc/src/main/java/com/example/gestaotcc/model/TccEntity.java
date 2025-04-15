@@ -1,9 +1,13 @@
 package com.example.gestaotcc.model;
 
 import com.example.gestaotcc.model.enuns.StatusTcc;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -11,6 +15,8 @@ import java.util.List;
 @Data
 @Table(name = "tcc")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class TccEntity {
 
     @Id
