@@ -1,6 +1,7 @@
 package com.example.gestaotcc.model;
 
 import com.example.gestaotcc.model.enuns.TipoUsuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,14 +37,17 @@ public class UsuarioEntity {
 
     @OneToMany(mappedBy = "aluno")
     @ToString.Exclude
+    @JsonIgnore
     private List<TccEntity> tccsComoAluno;
 
     @OneToMany(mappedBy = "orientador")
     @ToString.Exclude
+    @JsonIgnore
     private List<TccEntity> tccsComoOrientador;
 
     @OneToMany(mappedBy = "orientador")
     @ToString.Exclude
+    @JsonIgnore
     private List<AvaliacaoEntity> avaliacoes;
 }
 

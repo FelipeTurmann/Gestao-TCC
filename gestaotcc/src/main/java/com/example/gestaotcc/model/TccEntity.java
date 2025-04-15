@@ -30,11 +30,11 @@ public class TccEntity {
     @Column(nullable = false)
     private StatusTcc status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "aluno_id", nullable = false)
     private UsuarioEntity aluno;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orientador_id", nullable = false)
     private UsuarioEntity orientador;
 

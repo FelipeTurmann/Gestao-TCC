@@ -25,11 +25,11 @@ public class AvaliacaoEntity {
     @Column(nullable = false)
     private LocalDateTime dataAvaliacao;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "entrega_id", nullable = false)
     private EntregaEntity entrega;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orientador_id", nullable = false)
     private UsuarioEntity orientador;
 }
