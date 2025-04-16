@@ -34,10 +34,6 @@ public class EntregaService {
             throw new RuntimeException("Apenas o autor do TCC pode enviar entregas");
         }
 
-        if (tcc.getStatus() == StatusTcc.EM_ANDAMENTO) {
-            throw new RuntimeException("TCC ainda não foi aprovado pelo orientador");
-        }
-
         if (tcc.getStatus() == StatusTcc.CONCLUIDO || tcc.getStatus() == StatusTcc.REPROVADO) {
             throw new RuntimeException("Não é possível enviar entregas para um TCC já finalizado");
         }

@@ -2,8 +2,11 @@ package com.example.gestaotcc.model;
 
 import com.example.gestaotcc.model.enuns.TipoEntrega;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,6 +14,8 @@ import java.util.List;
 @Table(name = "Entregas")
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class EntregaEntity {
 
     @Id
