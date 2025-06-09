@@ -4,6 +4,7 @@ import com.example.gestaotcc.model.AvaliacaoEntity;
 import com.example.gestaotcc.model.EntregaEntity;
 import com.example.gestaotcc.model.TccEntity;
 import com.example.gestaotcc.model.UsuarioEntity;
+import com.example.gestaotcc.model.enuns.StatusTcc;
 import com.example.gestaotcc.model.enuns.TipoEntrega;
 import com.example.gestaotcc.model.enuns.TipoUsuario;
 import com.example.gestaotcc.repository.AvaliacaoRepository;
@@ -61,8 +62,9 @@ public class AvaliacaoService {
 
         // Se for uma entrega final com nota >=7, podemos sugerir atualizar status do TCC para concluído
         if (entrega.getTipo() == TipoEntrega.FINAL && avaliacao.getNota() >= 7.0) {
-            // Aqui poderíamos atualizar automaticamente o status do TCC para concluído,
-            // mas vamos deixar isso para o orientador fazer manualmente
+           tccService.atualizarStatusTcc(tcc.getId(), StatusTcc.CONCLUIDO, usuarioSolicitante);
+        } else {
+            tccService.atualizarStatusTcc(tcc.getId(), StatusTcc.REPROVADO, usuarioSolicitante);
         }
 
         return avaliacaoRepository.save(avaliacao);
